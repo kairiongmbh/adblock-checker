@@ -11,4 +11,5 @@
 4. See logs and when you see message "Ready to read from stdin!" app is ready to accept url's via stdin.
 
 Very basic work schema is like:
-Send url (e.g. http://google.com/) via stdin >>> processing >>> send all matches and errors to tatler if it was initialized >>> receive response via stdout
+
+**Send url (e.g. http://google.com/) via stdin >>> processing >>> send all matches and errors to tatler if it was initialized >>> receive response via stdout**
