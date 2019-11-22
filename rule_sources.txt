@@ -1,0 +1,5 @@
+https://easylist-downloads.adblockplus.org/easylistgermany+easylist.txt
+https://raw.githubusercontent.com/betterwebleon/international-list/master/filters.txt
+https://raw.githubusercontent.com/deletescape/noads/master/lists/add-switzerland.txt
+https://raw.githubusercontent.com/Akamaru/Adblock-Filterliste/master/filterlist.txt
+https://raw.githubusercontent.com/abp-filters/abp-filters-anti-cv/master/german.txt

@@ -12,8 +12,8 @@
   "license": "ISC",
   "dependencies": {
     "adblock-rs": "^0.1.37",
-    "bluebird": "^3.7.1",
     "got": "^9.6.0",
+    "scramjet": "^4.27.2",
     "tatler-client": "^1.0.7"
   }
 }
