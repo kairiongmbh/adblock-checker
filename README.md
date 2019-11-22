@@ -6,11 +6,9 @@
 1. Add global variables:
     * TATLER_NAME - tatler pipeline name 
     * TATLER_SECRET - pipeline secret
-    * SOURCES - list of filter sources with '::' delimeter (e.g. 'SOURCES=https://easylist-downloads.adblockplus.org/easylistgermany+easylist.txt::https://raw.githubusercontent.com/betterwebleon/international-list/master/filters.txt')
-    * DOMAINS_TO_CHECK - list of domains to check with '::' delimeter (e.g. 'DOMAINS_TO_CHECK=example.com::another-example.com')
-2. Run the script:
-    ```javascript
-        npm start
-    ```
+2. Add some additional sources for the rule lists into rule_sources.txt file.
+3. Build image and run container.
+4. See logs and when you see message "Ready to read from stdin!" app is ready to accept url's via stdin.
 
-All needed results/errors will be send to the tatlerbot.
+Very basic work schema is like:
+Send url (e.g. http://google.com/) via stdin >>> processing >>> send all matches and errors to tatler if it was initialized >>> receive response via stdout
