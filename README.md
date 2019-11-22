@@ -1,7 +1,8 @@
-#Adblock-checker
-###The module to check domains for being in block lists
+# Adblock-checker
 
-###How to use:
+### The module to check domains for being in block lists
+
+### How to use:
 1. Add global variables:
     * TATLER_NAME - tatler pipeline name 
     * TATLER_SECRET - pipeline secret
