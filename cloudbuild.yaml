@@ -1,8 +1,0 @@
-steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: [
-            'build',
-            '-t', 'eu.gcr.io/kairiongmbh/adblock-checker:${BRANCH_NAME}',
-            '.'
-        ]
-images: ['eu.gcr.io/kairiongmbh/adblock-checker:${BRANCH_NAME}']
