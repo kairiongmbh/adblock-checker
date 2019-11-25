@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const { StringStream } = require('scramjet');
 
+process.stdin.pause(); // pause stdin until initialization ends
+
 const ruleFileName = './rule_sources.txt';
 const {
   TATLER_NAME: tatlerName,
@@ -30,6 +32,15 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
     .lines()
     .parse((url) => ({ url }))
     .map(async ({ url }) => {
+      if (!url) {
+        return;
+      }
+
+      stream.whenEnd().then(() => {
+        console.log('after whenEnd');
+        process.exit();
+      });
+
       let res = '';
       for (let sourceName in ruleSources) {
         const client = new AdBlockClient.Engine(ruleSources[sourceName].split('\n'), true);
@@ -58,10 +69,7 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
   stream
     .pipe(process.stdout);
 
-  stream.whenEnd().then(() => {
-    console.log('after whenEnd');
-    process.exit();
-  });
+  process.stdin.resume();
 })();
 
 async function getRuleSources () {
