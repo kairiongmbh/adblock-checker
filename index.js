@@ -25,10 +25,11 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
 (async () => {
   const ruleSources = await getRuleSources();
   console.log('Ready to read from stdin!');
-  StringStream.from(process.stdin)
+  const stream = StringStream.from(process.stdin)
     .setOptions({maxParallel: 4})
     .lines()
-    .map(async (url) => {
+    .parse((url) => ({ url }))
+    .map(async ({ url }) => {
       let res = '';
       for (let sourceName in ruleSources) {
         const client = new AdBlockClient.Engine(ruleSources[sourceName].split('\n'), true);
@@ -52,8 +53,15 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
         }
       }
       return res;
-    })
+    });
+
+  stream
     .pipe(process.stdout);
+
+  stream.whenEnd().then(() => {
+    console.log('after whenEnd');
+    process.exit();
+  });
 })();
 
 async function getRuleSources () {
@@ -70,7 +78,7 @@ async function getRuleSources () {
         acc[source] = body;
         console.log(`Source ${source} was successfully parsed!`);
       } catch (e) {
-        await tatler(`There was an error during source parsing! Source: ${source}, error: ${JSON.stringify(e)}`);
+        await tatler(`There was an error during source parsing! Source: ${source}, error: ${e}`);
       }
     }, {});
 }
