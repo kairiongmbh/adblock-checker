@@ -5,8 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const { StringStream } = require('scramjet');
 
-process.stdin.pause(); // pause stdin until initialization ends
-
 const ruleFileName = './rule_sources.txt';
 const {
   TATLER_NAME: tatlerName,
@@ -36,11 +34,6 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
         return;
       }
 
-      stream.whenEnd().then(() => {
-        console.log('after whenEnd');
-        process.exit();
-      });
-
       let res = '';
       for (let sourceName in ruleSources) {
         const client = new AdBlockClient.Engine(ruleSources[sourceName].split('\n'), true);
@@ -59,6 +52,10 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
           const matchedText = `Url ${url} was matched in the list: ${sourceName} by the rule: ${filter}}`;
           res += matchedText + '\n';
           await tatler(matchedText);
+        } else if (forceGrepInList(url, ruleSources[sourceName])) {
+          const matchedText = `Url ${url} was matched in the list: ${sourceName} by force grep`;
+          res += matchedText + '\n';
+          await tatler(matchedText);
         } else {
           res += `${url} wasn't found in ${sourceName} \n`;
         }
@@ -67,9 +64,9 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
     });
 
   stream
+    .whenEnd().then(() => process.exit());
+  stream
     .pipe(process.stdout);
-
-  process.stdin.resume();
 })();
 
 async function getRuleSources () {
@@ -89,4 +86,16 @@ async function getRuleSources () {
         await tatler(`There was an error during source parsing! Source: ${source}, error: ${e}`);
       }
     }, {});
+}
+
+function forceGrepInList (url, list) {
+  let u;
+  try {
+    u = new URL(url);
+  } catch (e) {
+    console.error(`Url ${url} seems to not be an url. Could you check it, please?`);
+    return false;
+  }
+
+  return (new RegExp(`\\W${u.hostname}\\W`, 'gim')).test(list);
 }
