@@ -13,10 +13,11 @@ const {
 
 let tatler = () => {};
 if (tatlerName && tatlerSecret) {
-  console.log('Tatler is switched off');
   tatler = Tatler({
     [tatlerName]: tatlerSecret
   }, tatlerName);
+} else {
+  console.log('You didn\'t pass tatler credentials. Tatler is switched off');
 }
 
 // TODO: uncomment after new release
