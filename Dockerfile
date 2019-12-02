@@ -27,8 +27,8 @@ RUN set -eux; \
     cargo --version; \
     rustc --version;
 
-COPY package.json .
-RUN npm install
+COPY package-lock.json package.json ./
+RUN npm ci
 COPY . .
 
 CMD [ "npm", "start" ]
