@@ -1,25 +1,12 @@
 const got = require('got');
-const Tatler = require('tatler-client');
 const AdBlockClient = require('adblock-rs');
 const fs = require('fs');
 const path = require('path');
 const { StringStream } = require('scramjet');
 const ruleBlackList = require('./rule_blacklist');
+const tatler = require('lib/tatler');
 
 const ruleFileName = './rule_sources.txt';
-const {
-  TATLER_NAME: tatlerName,
-  TATLER_SECRET: tatlerSecret
-} = process.env;
-
-let tatler = () => {};
-if (tatlerName && tatlerSecret) {
-  tatler = Tatler({
-    [tatlerName]: tatlerSecret
-  }, tatlerName);
-} else {
-  console.log('You didn\'t pass tatler credentials. Tatler is switched off');
-}
 
 // TODO: uncomment after new release
 // let resources = AdBlockClient.uBlockResources('uBlockOrigin/src/web_accessible_resources', 'uBlockOrigin/src/js/redirect-engine.js', 'uBlockOrigin/assets/resources/scriptlets.js');
