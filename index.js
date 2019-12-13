@@ -4,6 +4,7 @@ const AdBlockClient = require('adblock-rs');
 const fs = require('fs');
 const path = require('path');
 const { StringStream } = require('scramjet');
+const ruleBlackList = require('./rule_blacklist');
 
 const ruleFileName = './rule_sources.txt';
 const {
@@ -27,7 +28,7 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
   const ruleSources = await getRuleSources();
   console.log('Ready to read from stdin!');
   const stream = StringStream.from(process.stdin)
-    .setOptions({maxParallel: 4})
+    .setOptions({maxParallel: 10})
     .lines()
     .parse((url) => ({ url }))
     .map(async ({ url }) => {
@@ -37,7 +38,13 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
 
       let res = '';
       for (let sourceName in ruleSources) {
-        const client = new AdBlockClient.Engine(ruleSources[sourceName].split('\n'), true);
+        let client;
+        try {
+          client = new AdBlockClient.Engine(ruleSources[sourceName].split('\n'), true);
+        } catch (e) {
+          console.log(`${sourceName} is not valid. Error during parsing: ${e}`);
+          continue;
+        }
 
         const {
           matched,
@@ -81,12 +88,20 @@ async function getRuleSources () {
       console.log(`Started ${source} parsing`);
       try {
         const { body } = await got(source);
-        acc[source] = body;
+        acc[source] = applyRuleBlacklist(source, body);
         console.log(`Source ${source} was successfully parsed!`);
       } catch (e) {
-        await tatler(`There was an error during source parsing! Source: ${source}, error: ${e}`);
+        // await tatler(`There was an error during source parsing! Source: ${source}, error: ${e}`);
       }
     }, {});
+}
+
+function applyRuleBlacklist (source, body) {
+  const blackRules = ruleBlackList[source];
+  if (!blackRules) {
+    return body;
+  }
+  return body.split('\n').filter((line) => !blackRules.include(line)).join('\n');
 }
 
 function forceGrepInList (url, list) {
