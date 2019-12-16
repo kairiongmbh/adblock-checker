@@ -3,8 +3,8 @@ const AdBlockClient = require('adblock-rs');
 const fs = require('fs');
 const path = require('path');
 const { StringStream } = require('scramjet');
-const ruleBlackList = require('./rule_blacklist');
-const tatler = require('lib/tatler');
+const { rules: ruleBlackList } = require('./blacklist');
+const tatler = require('./lib/tatler.js');
 
 const ruleFileName = './rule_sources.txt';
 

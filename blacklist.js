@@ -1,4 +1,4 @@
-module.exports = {
+module.exports.rules = {
   'https://raw.githubusercontent.com/mkb2091/blockconvert/master/output/adblock.txt': [
     '||www.de^'
   ],
@@ -12,3 +12,9 @@ module.exports = {
     '^tracking.$domain=~tracking.post.japanpost.jp'
   ]
 };
+
+module.exports.sources = [
+  'https://raw.githubusercontent.com/DandelionSprout/adfilt/master/AncientLibrary/ABP%20Macedonian%20List.txt',
+  'https://raw.githubusercontent.com/DandelionSprout/adfilt/master/AncientLibrary/TamilFriends%20List.txt',
+  'https://raw.githubusercontent.com/Cybo1927/Hosts/master/Hosts'
+];
