@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "adblock-rs": "^0.1.37",
+    "adblock-rs": "^0.5.0",
     "got": "^9.6.0",
     "scramjet": "^4.27.2",
     "tatler-client": "^1.0.7"
