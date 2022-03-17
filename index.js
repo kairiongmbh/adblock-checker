@@ -27,7 +27,9 @@ const placeToCheck = 'https://google.com'; // need a website example to make a c
       for (let sourceName in ruleSources) {
         let client;
         try {
-          client = new AdBlockClient.Engine(ruleSources[sourceName].split('\n'), true);
+          const filterSet = new AdBlockClient.FilterSet(true);
+          filterSet.addFilters(ruleSources[sourceName].split('\n'));
+          client = new AdBlockClient.Engine(filterSet, true);
         } catch (e) {
           console.log(`${sourceName} is not valid. Error during parsing: ${e}`);
           continue;
